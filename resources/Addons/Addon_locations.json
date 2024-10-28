@@ -1,0 +1,13 @@
+[
+    {"name": "Andorra", "latitude": 42.50779, "longitude": 1.52109},
+    {"name": "Luxembourg 1", "latitude": 49.68333, "longitude": 5.81667},
+    {"name": "Luxembourg 2", "latitude": 50.28407, "longitude": 5.91502},
+    {"name": "Luxembourg 3", "latitude": 49.96794, "longitude": 6.52734},
+    {"name": "Luxembourg 4", "latitude": 49.36667, "longitude": 6.16667},
+    {"name": "Luxembourg 5", "latitude": 49.61167, "longitude": 6.13},
+    {"name": "Luxembourg 6", "latitude": 50.42686, "longitude": 6.02794},
+    {"name": "Luxembourg 7", "latitude": 49.70045, "longitude": 6.57652},
+    {"name": "Liechtenstein", "latitude": 47.15476, "longitude": 9.82255},
+    {"name": "San Marino 1", "latitude": 44.09009, "longitude": 12.39935},
+    {"name": "San Marino 2", "latitude": 44.05755, "longitude": 12.56528},
+]
