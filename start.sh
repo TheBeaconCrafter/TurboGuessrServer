@@ -1,0 +1,1 @@
+screen -S turboguessr -d -m node app.js
