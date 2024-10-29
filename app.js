@@ -164,10 +164,10 @@ function checkCurrentSet() {
     // Check if the lastSavedDate is before 1 AM EDT today
     if (lastSavedDate < today1AM) {
         console.log("The current set should be refreshed.");
+        generateDailySet();
         return true;
     } else {
         console.log("The current set is still valid.");
-        generateDailySet();
         return false;
     }
 }
