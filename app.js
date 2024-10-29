@@ -3,6 +3,7 @@ const fs = require('fs');
 const cron = require('node-cron');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const https = require('https');
 
 const app = express();
 const port = 4350;
@@ -11,6 +12,13 @@ const version = '1.0.0';
 const fileList = [];
 const pickedFiles = [];
 const pickedLocations = [];
+
+//SSL
+const sslOptions = {
+    key: fs.readFileSync(path.join(__dirname, './secret/_.bcnlab.org_private_key.key')),
+    cert: fs.readFileSync(path.join(__dirname, './secret/bcnlab.org_ssl_certificate.cer')),
+    ca: fs.readFileSync(path.join(__dirname, './secret/_.bcnlab.org_ssl_certificate_INTERMEDIATE.cer'))
+};
 
 //SERVER
 
@@ -164,9 +172,13 @@ function checkCurrentSet() {
     }
 }
 
-app.listen(port, () => {
+// Create an HTTPS server
+const httpsServer = https.createServer(sslOptions, app);
+
+// Start the HTTPS server
+httpsServer.listen(port, () => {
     checkCurrentSet();
-    console.log('TurboGuessrServer V ' + version + ' listening on http://localhost:' + port);
+    console.log('TurboGuessrServer V ' + version + ' listening on https://localhost:' + port);
 });
 
 // Schedule daily set at 1am EDT every day (is EDT best?)
