@@ -7,7 +7,7 @@ const https = require('https');
 
 const app = express();
 const port = 4350;
-const version = '1.0.0';
+const version = '1.0.1';
 
 const fileList = [];
 const pickedFiles = [];
@@ -25,7 +25,7 @@ const sslOptions = {
 // maximum of 30 requests per minute
 const dailySetLimiter = rateLimit({
     windowMs: 1 * 60 * 1000,  // 1 minute
-    max: 30,                  // Limit in time window
+    max: 10,                  // Limit in time window
     message: "Too many requests, please try again later."
 });
 
