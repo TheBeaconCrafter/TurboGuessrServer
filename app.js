@@ -140,8 +140,32 @@ function saveSet(content) {
     });
 }
 
+function checkCurrentSet() {
+    const now = new Date();
+
+    // Calculate 1 AM EDT today (which is 5 AM UTC)
+    const today1AM = new Date(now);
+    today1AM.setUTCHours(5, 0, 0, 0); // 1 AM EDT corresponds to 5 AM UTC
+
+    // Get the last saved date from file
+    const lastSavedDate = new Date(fs.readFileSync('./output/lastsaved.txt', 'utf8'));
+
+    console.log("Last saved date: " + lastSavedDate.toISOString());
+    console.log("Today 1 AM EDT: " + today1AM.toISOString());
+
+    // Check if the lastSavedDate is before 1 AM EDT today
+    if (lastSavedDate < today1AM) {
+        console.log("The current set should be refreshed.");
+        return true;
+    } else {
+        console.log("The current set is still valid.");
+        generateDailySet();
+        return false;
+    }
+}
+
 app.listen(port, () => {
-    generateDailySet();
+    checkCurrentSet();
     console.log('TurboGuessrServer V ' + version + ' listening on http://localhost:' + port);
 });
 
