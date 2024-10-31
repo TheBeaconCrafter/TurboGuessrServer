@@ -130,3 +130,4 @@ dist
 .pnp.*
 output/dailyset.json
 output/lastsaved.txt
+secret/*
