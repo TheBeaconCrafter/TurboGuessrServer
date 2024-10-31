@@ -7,7 +7,7 @@ const https = require('https');
 
 const app = express();
 const port = 4350;
-const version = '1.0.1';
+const version = '1.0.2';
 
 const fileList = [];
 const pickedFiles = [];
@@ -77,6 +77,11 @@ function pickFile(files) {
 }
 
 function generateDailySet() {
+    // Clear previous entries
+    fileList.length = 0;
+    pickedFiles.length = 0;
+    pickedLocations.length = 0;
+
     getAllJsonFiles('./resources');
     for (let i = 0; i < 5; i++) {
         pickFile(fileList);
@@ -116,7 +121,7 @@ function pickLocation(files) {
     });
     pickedLocations.push(selectedLocations);
     saveSet(JSON.stringify(selectedLocations));
-    console.log("Picked locations: ", selectedLocations);
+    console.log(`[${new Date().toISOString()}] Picked locations: ${JSON.stringify(selectedLocations)}`);
 }
 
 function saveSet(content) {
@@ -158,8 +163,8 @@ function checkCurrentSet() {
     // Get the last saved date from file
     const lastSavedDate = new Date(fs.readFileSync('./output/lastsaved.txt', 'utf8'));
 
-    console.log("Last saved date: " + lastSavedDate.toISOString());
-    console.log("Today 1 AM EDT: " + today1AM.toISOString());
+    //console.log("Last saved date: " + lastSavedDate.toISOString());
+    //console.log("Today 1 AM EDT: " + today1AM.toISOString());
 
     // Check if the lastSavedDate is before 1 AM EDT today
     if (lastSavedDate < today1AM) {
@@ -167,7 +172,7 @@ function checkCurrentSet() {
         generateDailySet();
         return true;
     } else {
-        console.log("The current set is still valid.");
+        console.log("The current set is still valid (last refreshed at " + lastSavedDate.toISOString() + ").");
         return false;
     }
 }
