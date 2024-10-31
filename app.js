@@ -15,9 +15,9 @@ const pickedLocations = [];
 
 //SSL
 const sslOptions = {
-    key: fs.readFileSync(path.join(__dirname, './secret/_.bcnlab.org_private_key.key')),
-    cert: fs.readFileSync(path.join(__dirname, './secret/bcnlab.org_ssl_certificate.cer')),
-    ca: fs.readFileSync(path.join(__dirname, './secret/_.bcnlab.org_ssl_certificate_INTERMEDIATE.cer'))
+    key: fs.readFileSync(path.join(__dirname, './secret/private_key.key')),
+    cert: fs.readFileSync(path.join(__dirname, './secret/ssl_certificate.cer')),
+    ca: fs.readFileSync(path.join(__dirname, './secret/certificate_INTERMEDIATE.cer'))
 };
 
 //SERVER
