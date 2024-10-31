@@ -68,37 +68,25 @@ function pickFile(files) {
     pickedFiles.push(file);
 }
 
-function generateDailySet() {
-    getAllJsonFiles('./resources');
-    for (let i = 0; i < 5; i++) {
-        pickFile(fileList);
-    }
-    console.log("Picked Files: " + pickedFiles);
-
-    pickLocation(pickedFiles);
-}
-
 function pickLocation(files) {
     const selectedLocations = [];
 
     files.forEach(file => {
+        if (selectedLocations.length >= 5) return; // Stop if we already have 5 locations
+
         const data = fs.readFileSync(file, 'utf8');
-
-        // Preprocess the data to handle invalid JSON structures
-        let fixedData = data.trim();
-
-        const regex = /,\s*([\]}])/g; // Matches a comma followed by whitespace and a closing bracket
-        fixedData = fixedData.replace(regex, '$1'); // Remove trailing commas
+        let fixedData = data.trim().replace(/,\s*([\]}])/g, '$1'); // Remove trailing commas
 
         let locationsArray;
         try {
             locationsArray = JSON.parse(fixedData);
         } catch (error) {
             console.error(`Error parsing JSON from file ${file}:`, error.message);
-            return; // Skip this file if there's a parsing error
+            return;
         }
 
         if (locationsArray.length > 0) {
+            // Pick one random location from the file
             const randomIndex = Math.floor(Math.random() * locationsArray.length);
             const selectedLocation = locationsArray[randomIndex];
             selectedLocations.push(selectedLocation);
@@ -106,9 +94,32 @@ function pickLocation(files) {
             console.warn(`No locations found in file ${file}`);
         }
     });
-    pickedLocations.push(selectedLocations);
+
+    // Save and log the selected locations
     saveSet(JSON.stringify(selectedLocations));
     console.log("Picked locations: ", selectedLocations);
+}
+
+function generateDailySet() {
+    // Clear previous entries
+    fileList.length = 0;
+    pickedFiles.length = 0;
+    pickedLocations.length = 0;
+
+    // Log generation start time
+    const now = new Date();
+    console.log(`Starting daily set generation at ${now.toLocaleString('en-US', { timeZone: 'America/New_York' })} EDT`);
+
+    // Reload JSON files
+    getAllJsonFiles('./resources');
+    
+    // Pick files (up to 5 unique files)
+    while (pickedFiles.length < 5 && fileList.length > 0) {
+        pickFile(fileList);
+    }
+
+    console.log("Picked Files: " + pickedFiles);
+    pickLocation(pickedFiles);
 }
 
 function saveSet(content) {
@@ -126,7 +137,7 @@ function saveSet(content) {
             console.error(err);
             return;
         } else {
-            console.log("Last saved file saved to lastsaved.txt");
+            console.log("Last saved timestamp recorded in lastsaved.txt");
         }
     });
 
@@ -135,7 +146,7 @@ function saveSet(content) {
             console.error(err);
             return;
         } else {
-            console.log("Daily set saved to dailyset.json");
+            console.log(`Daily set saved to dailyset.json at ${formattedDate}`);
         }
     });
 }
@@ -156,10 +167,10 @@ function checkCurrentSet() {
     // Check if the lastSavedDate is before 1 AM EDT today
     if (lastSavedDate < today1AM) {
         console.log("The current set should be refreshed.");
+        generateDailySet();
         return true;
     } else {
         console.log("The current set is still valid.");
-        generateDailySet();
         return false;
     }
 }
