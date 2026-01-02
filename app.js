@@ -7,7 +7,7 @@ const https = require('https');
 
 const app = express();
 const port = 4350;
-const version = '1.0.2';
+const version = '1.0.3';
 
 const fileList = [];
 const pickedFiles = [];
@@ -76,24 +76,6 @@ function pickFile(files) {
     pickedFiles.push(file);
 }
 
-<<<<<<< HEAD
-=======
-function generateDailySet() {
-    // Clear previous entries
-    fileList.length = 0;
-    pickedFiles.length = 0;
-    pickedLocations.length = 0;
-
-    getAllJsonFiles('./resources');
-    for (let i = 0; i < 5; i++) {
-        pickFile(fileList);
-    }
-    console.log("Picked Files: " + pickedFiles);
-
-    pickLocation(pickedFiles);
-}
-
->>>>>>> e946c6c6fd1cc396c66b788d0ddb8e4223f4a127
 function pickLocation(files) {
     const selectedLocations = [];
 
